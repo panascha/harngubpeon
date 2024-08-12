@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+
+</head>
+
+<style>
+    .header {
+        background-color: #f1f1f1;
+        text-align: center;
+        padding: 10px;
+        font-size: 30px;
+        color: #000;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+        border-bottom: 1px solid #e0e0e0;
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        right: 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .container {
+        margin-top: 100px;
+    }
+
+    .card {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .card-header {
+        background-color: #f1f1f1;
+        padding: 10px;
+        font-size: 20px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th {
+        background-color: #f1f1f1;
+        padding: 10px;
+        text-align: left;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+    }
+
+    .table td {
+        padding: 10px;
+        border-bottom: 1px solid #f1f1f1;
+    }
+
+    .table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .table button {
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .table button:hover {
+        background-color: #0056b3;
+    }
+
+    #removeUser {
+        background-color: #ff0000;
+    }
+
+    #removeUser:hover {
+        background-color: #ff0000;
+    }
+
+    #removeFood {
+        background-color: #ff0000;
+    }
+
+    #removeFood:hover {
+        background-color: #ff0000;
+    }
+
+    #userCheckbox {
+        margin-bottom: 20px;
+    }
+
+    #userCheckbox input[type='checkbox'] {
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    #userCheckbox input[type='checkbox']:checked {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+
+    table th {
+        background-color: #f1f1f1;
+        padding: 10px;
+        text-align: left;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+    }
+
+    table td {
+        padding: 10px;
+        border-bottom: 1px solid #f1f1f1;
+        max-width: 0;
+        line-height: 1.5;
+    }
+</style>
+
+<script>
+    // create array of users
+    var users = [];
+    var food = [];
+    var selectedUsers = [];
+    var userFood = [];
+    var userPay = {};
+
+    // create function to add user
+    function addUser() {
+        var username = $("#username").val();
+        users.push(username);
+        userPay[username] = 0;
+        console.log(users);
+        $("#username").val("");
+        renderUserTable();
+    }
+    // create function to add food
+    function addFood() {
+        var foodname = $("#foodname").val();
+        var price = $("#price").val();
+        food.push({
+            foodname: foodname,
+            price: price,
+            selectedUsers: selectedUsers,
+            countUsers: selectedUsers.length,
+            Pay: price / selectedUsers.length
+        });
+        // add food price to each user
+        for (var i = 0; i < selectedUsers.length; i++) {
+            var user = selectedUsers[i];
+            if (userFood[user] === undefined) {
+                userFood[user] = [];
+            }
+            userFood[user].push({
+                foodname: foodname,
+                price: price,
+                Pay: price / selectedUsers.length
+            });
+        }
+        // calculate total price for each user
+        for (var i = 0; i < selectedUsers.length; i++) {
+            var user = selectedUsers[i];
+            if (userPay[user] === undefined) {
+                userPay[user] = 0;
+            }
+            userPay[user] += price / selectedUsers.length;
+            console.log("userPay", userPay);
+        }
+        console.log(food);
+
+        $("#foodname").val("");
+        $("#price").val("");
+        // clear selected users after add food to the list
+        selectedUsers = [];
+        renderUserButton();
+        renderFoodTable();
+        renderUserTable();
+    }
+    // create function to render user table
+    function renderUserTable() {
+        renderUserButton();
+        var html = "";
+        for (var i = 0; i < users.length; i++) {
+            html += "<tr>";
+            html += "<td>" + users[i] + "</td>";
+            html += "<td>" + userPay[users[i]] + "</td>";
+            //html += "<td><button id='removeUser'>Remove</button></td>";
+            // show foodname and Pay for each user in the table not show the price from userFood
+            html += "<td>" + (userFood[users[i]] ? userFood[users[i]].map(function (item) {
+                return item.foodname + " (" + item.Pay + ")";
+            }).join(", ") : "") + "</td>";
+            html += "</tr>";
+        }
+        $("#userTable").html(html);
+    }
+    // create function to render food table
+    function renderFoodTable() {
+        // make each tr clickable to show the food detail in the card at center of the page
+        var html = "";
+        for (var i = 0; i < food.length; i++) {
+            html += "<tr>";
+            html += "<td>" + food[i].foodname + "</td>";
+            html += "<td>" + food[i].price + "</td>";
+            // add number of button to remove food after id to make it unique
+            //html += `<td><button id='removeFood'>Remove</button></td>`;
+            html += "<td>" + food[i].selectedUsers + "</td>";
+            html += "</tr>";
+        }
+        $("#foodTable").html(html);
+    }
+
+    /*
+    // button to remove user at the end of table
+    $(document).on("click", "#removeUser", function () {
+        // remove the selected user from the list base on the index of the user and id of the button
+        var index = $(this).closest("tr").index(); // get the index of the row in the table to remove the user
+        users.splice(index, 1);
+        console.log(users);
+        // update food, userFood and userPay
+        for (var i = 0; i < food.length; i++) {
+            var foodname = food[i].foodname;
+            var price = food[i].price;
+            food[i].selectedUsers = [];
+            food[i].countUsers = 0;
+            food[i].Pay = 0;
+            for (var j = 0; j < users.length; j++) {
+                var user = users[j];
+                food[i].selectedUsers.push(user);
+                food[i].countUsers = users.length;
+                food[i].Pay = price / users.length;
+                if (userFood[user] === undefined) {
+                    userFood[user] = [];
+                }
+                userFood[user].push({
+                    foodname: foodname,
+                    price: price,
+                    Pay: price / users.length
+                });
+                if (userPay[user] === undefined) {
+                    userPay[user] = 0;
+                }
+                userPay[user] += price / users.length;
+            }
+        }
+        renderUserTable();
+        renderFoodTable();
+        console.log(users);
+    });
+    // button to remove food at the end of table
+    $(document).on("click", "#removeFood", function () {
+        // remove the selected food from the list not using pop
+        var index = $(this).closest("tr").index(); // get the index of the row in the table to remove the food
+        food.splice(index, 1);
+        console.log(food);
+        // update food, userFood and userPay
+        for (var i = 0; i < food.length; i++) {
+            var foodname = food[i].foodname;
+            var price = food[i].price;
+            food[i].selectedUsers = [];
+            food[i].countUsers = 0;
+            food[i].Pay = 0;
+            for (var j = 0; j < users.length; j++) {
+                var user = users[j];
+                food[i].selectedUsers.push(user);
+                food[i].countUsers = users.length;
+                food[i].Pay = price / users.length;
+                if (userFood[user] === undefined) {
+                    userFood[user] = [];
+                }
+                userFood[user].push({
+                    foodname: foodname,
+                    price: price,
+                    Pay: price / users.length
+                });
+                if (userPay[user] === undefined) {
+                    userPay[user] = 0;
+                }
+                userPay[user] += price / users.length;
+            }
+        }
+        renderUserTable();
+        renderFoodTable();
+    });
+
+*/
+
+    // create event listener for add user form
+    $(document).on("submit", "#addUserForm", function (e) {
+        e.preventDefault();
+        addUser();
+    });
+
+    // create event listener for add food form
+    $(document).on("submit", "#addFoodForm", function (e) {
+        e.preventDefault();
+        addFood();
+    });
+    // create event listener for add user form
+    $(document).ready(function () {
+        renderUserTable();
+        renderFoodTable();
+    });
+
+    // create function to render user checkbox with multi select
+    function renderUserButton() {
+        var html = "<div id='userCheckbox'>";
+        for (var i = 0; i < users.length; i++) {
+            // create checkbox for each user in button form
+            html += "<input type='checkbox' name='user[]' value='" + users[i] + "'>" + users[i] + "</input>";
+        }
+        html += "</div>";
+        $("#userCheckbox").html(html);
+    }
+
+    $(document).on("change", "input[type='checkbox']", function () {
+        $("input[type='checkbox']:checked").each(function () {
+            // check if user is already selected
+            if (selectedUsers.indexOf($(this).val()) === -1) {
+                selectedUsers.push($(this).val());
+                console.log("add", selectedUsers);
+            }
+        });
+        $("input[type='checkbox']:not(:checked)").each(function () {
+            // check if user is already selected
+            if (selectedUsers.indexOf($(this).val()) !== -1) {
+                selectedUsers.splice(selectedUsers.indexOf($(this).val()), 1);
+                console.log("remove", selectedUsers);
+            }
+        });
+        console.log("Now", selectedUsers);
+    });
+
+
+</script>
+
+<body>
+    <div class="header">Harn(Kow)-Gub-Peon</div>
+    <!-- create 2 box to add users and food-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Add User</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="addUserForm">
+                            <div class="form-group">
+                                <label for="username">Name</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <button type="submit" class="btn">Add User</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Add Food</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="addFoodForm">
+                            <div class="form-group
+                            ">
+                                <label for="foodname">Food Name</label>
+                                <input type="text" class="form-control" id="foodname" name="foodname" required>
+                            </div>
+                            <div class="form-group
+                            ">
+                                <label for="price">Price</label>
+                                <input type="number" class="form-control" id="price" name="price" required>
+                            </div>
+                            <!-- show button of all user to select who can eat this food multiple select-->
+                            <div id="userCheckbox"></div>
+                            <button type="submit" class="btn">Add Food</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Users</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Total</th>
+                                    <th>Food</th>
+                                    <!-- <th>Remove</th> -->
+                                </tr>
+                            </thead>
+                            <tbody id="userTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Food</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <!-- <th>Remove</th> -->
+                                    <th>By</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="foodTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
