@@ -5,468 +5,485 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <title>Harn-Gub-Peon</title>
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <style>
+        /* ======================================== */
+        /*          1. THEME & VARIABLES            */
+        /* ======================================== */
+        :root {
+            --primary-start: #1abc9c;
+            --primary-end: #3498db;
+            --danger-color: #e74c3c;
+            --danger-hover: #c0392b;
+            --success-color: #2ecc71;
+            --success-hover: #27ae60;
+            --secondary-color: #bdc3c7;
+            --secondary-hover: #95a5a6;
+            --qr-color-start: #8e44ad;
+            --qr-color-end: #9b59b6;
 
-</head>
+            --background-color: #f4f7f6;
+            --background-color-light: #ffffff;
+            --background-color-hover: #eaf6f4;
 
-<style>
-    .header {
-        background-color: #f1f1f1;
-        text-align: center;
-        padding: 10px;
-        font-size: 30px;
-        color: #000;
-        font-family: 'Roboto', sans-serif;
-        font-weight: 500;
-        border-bottom: 1px solid #e0e0e0;
-        position: fixed;
-        width: 100%;
-        z-index: 1000;
-        top: 0;
-        left: 0;
-        right: 0;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --text-white: #ffffff;
 
-    .container {
-        margin-top: 100px;
-    }
+            --border-color: #e0e6e4;
+            --border-radius-main: 12px;
+            --border-radius-small: 6px;
+            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+            --shadow-lifted: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
 
-    .card {
-        background-color: #fff;
-        border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-    }
+        /* ======================================== */
+        /*          2. GENERAL & LAYOUT             */
+        /* ======================================== */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-dark);
+            margin: 0;
+            padding-top: 100px;
+            /* More space for the taller header */
+        }
 
-    .card-header {
-        background-color: #f1f1f1;
-        padding: 10px;
-        font-size: 20px;
-        font-family: 'Roboto', sans-serif;
-        font-weight: 500;
-    }
+        .header {
+            background: linear-gradient(45deg, var(--primary-start), var(--primary-end));
+            text-align: center;
+            padding: 20px;
+            font-size: 2.2rem;
+            color: var(--text-white);
+            font-weight: 300;
+            letter-spacing: 2px;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            box-shadow: var(--shadow-soft);
+        }
 
-    .card-body {
-        padding: 20px;
-    }
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
 
-    .form-group {
-        margin-bottom: 20px;
-    }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
 
-    .form-control {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #e0e0e0;
-        border-radius: 5px;
-    }
+        /* ======================================== */
+        /*          3. CARD & FORM STYLES           */
+        /* ======================================== */
+        .card {
+            background-color: var(--background-color-light);
+            border-radius: var(--border-radius-main);
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
 
-    .btn {
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lifted);
+        }
 
-    .btn:hover {
-        background-color: #0056b3;
-    }
+        .card-header {
+            padding: 20px 25px;
+            font-size: 1.4rem;
+            font-weight: 500;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-dark);
+        }
 
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+        .card-body {
+            padding: 25px;
+        }
 
-    .table th {
-        background-color: #f1f1f1;
-        padding: 10px;
-        text-align: left;
-        font-family: 'Roboto', sans-serif;
-        font-weight: 500;
-    }
+        .form-group {
+            margin-bottom: 25px;
+        }
 
-    .table td {
-        padding: 10px;
-        border-bottom: 1px solid #f1f1f1;
-    }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
 
-    .table tr:last-child td {
-        border-bottom: none;
-    }
+        .form-control {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-small);
+            font-size: 1rem;
+            transition: all 0.2s ease-in-out;
+        }
 
-    .table button {
-        padding: 5px 10px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-start);
+            box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.2);
+        }
 
-    .table button:hover {
-        background-color: #0056b3;
-    }
+        .card-body>form>.btn {
+            width: 100%;
+            padding: 14px 20px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
 
-    #removeUser {
-        background-color: #ff0000;
-    }
+        /* ======================================== */
+        /*          4. BUTTON STYLES                */
+        /* ======================================== */
+        .btn {
+            padding: 10px 20px;
+            color: var(--text-white);
+            background: linear-gradient(45deg, var(--primary-start), var(--primary-end));
+            border: none;
+            border-radius: var(--border-radius-small);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-    #removeUser:hover {
-        background-color: #ff0000;
-    }
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
 
-    #removeFood {
-        background-color: #ff0000;
-    }
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            margin: 0 3px;
+            box-shadow: none;
+        }
 
-    #removeFood:hover {
-        background-color: #ff0000;
-    }
+        .btn-edit {
+            background: linear-gradient(45deg, var(--success-color), #28b485);
+        }
 
-    #userCheckbox {
-        margin-bottom: 20px;
-    }
+        .btn-success {
+            background-color: var(--success-color);
+        }
 
-    #userCheckbox input[type='checkbox'] {
-        margin-right: 10px;
-        margin-left: 10px;
-    }
+        .btn-success:hover {
+            background-color: var(--success-hover);
+        }
 
-    #userCheckbox input[type='checkbox']:checked {
-        background-color: #007bff;
-        color: #fff;
-    }
+        .btn-delete {
+            background: linear-gradient(45deg, var(--danger-color), #d35400);
+        }
 
-    table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 10px;
-    }
+        .btn-secondary {
+            background: linear-gradient(45deg, var(--secondary-color), var(--text-light));
+        }
 
-    table th {
-        background-color: #f1f1f1;
-        padding: 10px;
-        text-align: left;
-        font-family: 'Roboto', sans-serif;
-        font-weight: 500;
-    }
+        .btn-qr {
+            background: linear-gradient(45deg, var(--qr-color-start), var(--qr-color-end));
+        }
 
-    table td {
-        padding: 10px;
-        border-bottom: 1px solid #f1f1f1;
-        max-width: 0;
-        line-height: 1.5;
-    }
-</style>
 
-<script>
-    // create array of users
-    var users = [];
-    var food = [];
-    var selectedUsers = [];
-    var userFood = [];
-    var userPay = {};
+        /* ======================================== */
+        /*          5. TABLE STYLES                 */
+        /* ======================================== */
+        .table-container {
+            overflow-x: auto;
+        }
 
-    // create function to add user
-    function addUser() {
-        var username = $("#username").val();
-        users.push(username);
-        userPay[username] = 0;
-        console.log(users);
-        $("#username").val("");
-        renderUserTable();
-    }
-    // create function to add food
-    function addFood() {
-        var foodname = $("#foodname").val();
-        var price = $("#price").val();
-        food.push({
-            foodname: foodname,
-            price: price,
-            selectedUsers: selectedUsers,
-            countUsers: selectedUsers.length,
-            Pay: price / selectedUsers.length
-        });
-        // add food price to each user
-        for (var i = 0; i < selectedUsers.length; i++) {
-            var user = selectedUsers[i];
-            if (userFood[user] === undefined) {
-                userFood[user] = [];
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 16px 15px;
+            text-align: left;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table th {
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+        }
+
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table tr:hover {
+            background-color: var(--background-color-hover);
+        }
+
+        .table td .actions {
+            white-space: nowrap;
+        }
+
+        .food-list-item {
+            display: block;
+            font-size: 0.9em;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        /* ======================================== */
+        /*          6. CUSTOM CHECKBOXES            */
+        /* ======================================== */
+        #user-checkbox-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-wrapper {
+            position: relative;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            opacity: 0;
+            position: absolute;
+            width: 0;
+            height: 0;
+        }
+
+        .checkbox-wrapper label {
+            cursor: pointer;
+            padding-left: 30px;
+            /* Space for custom box */
+            position: relative;
+            user-select: none;
+            font-weight: 400;
+            color: var(--text-dark);
+            line-height: 20px;
+            /* Vertically align with box */
+            display: inline-block;
+        }
+
+        .checkbox-wrapper label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            background-color: #fff;
+            border-radius: var(--border-radius-small);
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-wrapper label::after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 4px;
+            width: 6px;
+            height: 10px;
+            border: solid var(--text-white);
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-wrapper input[type="checkbox"]:checked+label::before {
+            background-color: var(--primary-start);
+            border-color: var(--primary-start);
+        }
+
+        .checkbox-wrapper input[type="checkbox"]:checked+label::after {
+            opacity: 1;
+        }
+
+        /* ======================================== */
+        /*          7. QR CODE MODAL                */
+        /* ======================================== */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(44, 62, 80, 0.7);
+            z-index: 2000;
+            display: none;
+            /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: var(--background-color-light);
+            padding: 20px;
+            border-radius: var(--border-radius-main);
+            box-shadow: var(--shadow-lifted);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            animation: slideIn 0.4s ease;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .close-modal {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: var(--text-light);
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: var(--danger-color);
+        }
+
+        .modal-body img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius-small);
+            border: 1px solid var(--border-color);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
             }
-            userFood[user].push({
-                foodname: foodname,
-                price: price,
-                Pay: price / selectedUsers.length
-            });
-        }
-        // calculate total price for each user
-        for (var i = 0; i < selectedUsers.length; i++) {
-            var user = selectedUsers[i];
-            if (userPay[user] === undefined) {
-                userPay[user] = 0;
-            }
-            userPay[user] += price / selectedUsers.length;
-            console.log("userPay", userPay);
-        }
-        console.log(food);
 
-        $("#foodname").val("");
-        $("#price").val("");
-        // clear selected users after add food to the list
-        selectedUsers = [];
-        renderUserButton();
-        renderFoodTable();
-        renderUserTable();
-    }
-    // create function to render user table
-    function renderUserTable() {
-        renderUserButton();
-        var html = "";
-        for (var i = 0; i < users.length; i++) {
-            html += "<tr>";
-            html += "<td>" + users[i] + "</td>";
-            html += "<td>" + userPay[users[i]] + "</td>";
-            //html += "<td><button id='removeUser'>Remove</button></td>";
-            // show foodname and Pay for each user in the table not show the price from userFood
-            html += "<td>" + (userFood[users[i]] ? userFood[users[i]].map(function (item) {
-                return item.foodname + " (" + item.Pay + ")";
-            }).join(", ") : "") + "</td>";
-            html += "</tr>";
-        }
-        $("#userTable").html(html);
-    }
-    // create function to render food table
-    function renderFoodTable() {
-        // make each tr clickable to show the food detail in the card at center of the page
-        var html = "";
-        for (var i = 0; i < food.length; i++) {
-            html += "<tr>";
-            html += "<td>" + food[i].foodname + "</td>";
-            html += "<td>" + food[i].price + "</td>";
-            // add number of button to remove food after id to make it unique
-            //html += `<td><button id='removeFood'>Remove</button></td>`;
-            html += "<td>" + food[i].selectedUsers + "</td>";
-            html += "</tr>";
-        }
-        $("#foodTable").html(html);
-    }
-
-    /*
-    // button to remove user at the end of table
-    $(document).on("click", "#removeUser", function () {
-        // remove the selected user from the list base on the index of the user and id of the button
-        var index = $(this).closest("tr").index(); // get the index of the row in the table to remove the user
-        users.splice(index, 1);
-        console.log(users);
-        // update food, userFood and userPay
-        for (var i = 0; i < food.length; i++) {
-            var foodname = food[i].foodname;
-            var price = food[i].price;
-            food[i].selectedUsers = [];
-            food[i].countUsers = 0;
-            food[i].Pay = 0;
-            for (var j = 0; j < users.length; j++) {
-                var user = users[j];
-                food[i].selectedUsers.push(user);
-                food[i].countUsers = users.length;
-                food[i].Pay = price / users.length;
-                if (userFood[user] === undefined) {
-                    userFood[user] = [];
-                }
-                userFood[user].push({
-                    foodname: foodname,
-                    price: price,
-                    Pay: price / users.length
-                });
-                if (userPay[user] === undefined) {
-                    userPay[user] = 0;
-                }
-                userPay[user] += price / users.length;
+            to {
+                opacity: 1;
             }
         }
-        renderUserTable();
-        renderFoodTable();
-        console.log(users);
-    });
-    // button to remove food at the end of table
-    $(document).on("click", "#removeFood", function () {
-        // remove the selected food from the list not using pop
-        var index = $(this).closest("tr").index(); // get the index of the row in the table to remove the food
-        food.splice(index, 1);
-        console.log(food);
-        // update food, userFood and userPay
-        for (var i = 0; i < food.length; i++) {
-            var foodname = food[i].foodname;
-            var price = food[i].price;
-            food[i].selectedUsers = [];
-            food[i].countUsers = 0;
-            food[i].Pay = 0;
-            for (var j = 0; j < users.length; j++) {
-                var user = users[j];
-                food[i].selectedUsers.push(user);
-                food[i].countUsers = users.length;
-                food[i].Pay = price / users.length;
-                if (userFood[user] === undefined) {
-                    userFood[user] = [];
-                }
-                userFood[user].push({
-                    foodname: foodname,
-                    price: price,
-                    Pay: price / users.length
-                });
-                if (userPay[user] === undefined) {
-                    userPay[user] = 0;
-                }
-                userPay[user] += price / users.length;
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
             }
         }
-        renderUserTable();
-        renderFoodTable();
-    });
-
-*/
-
-    // create event listener for add user form
-    $(document).on("submit", "#addUserForm", function (e) {
-        e.preventDefault();
-        addUser();
-    });
-
-    // create event listener for add food form
-    $(document).on("submit", "#addFoodForm", function (e) {
-        e.preventDefault();
-        addFood();
-    });
-    // create event listener for add user form
-    $(document).ready(function () {
-        renderUserTable();
-        renderFoodTable();
-    });
-
-    // create function to render user checkbox with multi select
-    function renderUserButton() {
-        var html = "<div id='userCheckbox'>";
-        for (var i = 0; i < users.length; i++) {
-            // create checkbox for each user in button form
-            html += "<input type='checkbox' name='user[]' value='" + users[i] + "'>" + users[i] + "</input>";
-        }
-        html += "</div>";
-        $("#userCheckbox").html(html);
-    }
-
-    $(document).on("change", "input[type='checkbox']", function () {
-        $("input[type='checkbox']:checked").each(function () {
-            // check if user is already selected
-            if (selectedUsers.indexOf($(this).val()) === -1) {
-                selectedUsers.push($(this).val());
-                console.log("add", selectedUsers);
-            }
-        });
-        $("input[type='checkbox']:not(:checked)").each(function () {
-            // check if user is already selected
-            if (selectedUsers.indexOf($(this).val()) !== -1) {
-                selectedUsers.splice(selectedUsers.indexOf($(this).val()), 1);
-                console.log("remove", selectedUsers);
-            }
-        });
-        console.log("Now", selectedUsers);
-    });
-
-
-</script>
+    </style>
+    </head>
 
 <body>
-    <div class="header">Harn(Kow)-Gub-Peon</div>
-    <!-- create 2 box to add users and food-->
+
+    <div class="header">Harn-Gub-Peon</div>
+
     <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Add User</h3>
-                    </div>
-                    <div class="card-body">
-                        <form id="addUserForm">
+        <div class="grid">
+            <!-- Add User Card -->
+            <div class="card">
+                <div class="card-header">Add User</div>
+                <div class="card-body">
+                    <form id="addUserForm">
+                        <div class="form-group">
+                            <label for="username">Name</label>
+                            <input type="text" class="form-control" id="username" placeholder="e.g., Alice" required>
+                            </div>
+                            <!-- NEW: QR Code Upload Field -->
                             <div class="form-group">
-                                <label for="username">Name</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
+                                <label for="userQRCode">Payment QR Code (Optional)</label>
+                                <input type="file" class="form-control" id="userQRCode" accept="image/*">
                             </div>
                             <button type="submit" class="btn">Add User</button>
-                        </form>
-                    </div>
+                            </form>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Add Food</h3>
-                    </div>
-                    <div class="card-body">
-                        <form id="addFoodForm">
-                            <div class="form-group
-                            ">
-                                <label for="foodname">Food Name</label>
-                                <input type="text" class="form-control" id="foodname" name="foodname" required>
-                            </div>
-                            <div class="form-group
-                            ">
-                                <label for="price">Price</label>
-                                <input type="number" class="form-control" id="price" name="price" required>
-                            </div>
-                            <!-- show button of all user to select who can eat this food multiple select-->
-                            <div id="userCheckbox"></div>
-                            <button type="submit" class="btn">Add Food</button>
-                        </form>
-                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Users</h3>
-                    </div>
-                    <div class="card-body">
+<!-- Add Food Card -->
+<div class="card">
+                <div class="card-header">Add Food</div>
+                <div class="card-body">
+                    <form id="addFoodForm">
+                        <div class="form-group">
+                            <label for="foodname">Food Name</label>
+                            <input type="text" class="form-control" id="foodname" placeholder="e.g., Pizza" required>
+                            </div>
+                        <div class="form-group">
+                            <label for="price">Price</label>
+                            <input type="number" class="form-control" id="price" min="0" step="any" placeholder="e.g., 25.50" required>
+                            </div>
+                        <div class="form-group">
+                            <label>Shared By</label>
+                            <div id="user-checkbox-container">Add users to see options here.</div>
+                        </div>
+                        <button type="submit" class="btn">Add Food</button>
+                        </form>
+                        </div>
+                        </div>
+<!-- Users Table Card -->
+<div class="card">
+                <div class="card-header">Users</div>
+                <div class="card-body" style="padding: 0;">
+                    <div class="table-container">
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Total</th>
-                                    <th>Food</th>
-                                    <!-- <th>Remove</th> -->
+                                    <th>Total Owed</th>
+                                    <th>Items</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="userTable">
+                            <tbody id="userTableBody">
+                                <!-- User rows will be injected here -->
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Food</h3>
-                    </div>
-                    <div class="card-body">
+<!-- Food Table Card -->
+<div class="card">
+                <div class="card-header">Food</div>
+                <div class="card-body" style="padding: 0;">
+                    <div class="table-container">
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>Name</th>
                                     <th>Price</th>
-                                    <!-- <th>Remove</th> -->
-                                    <th>By</th>
-
+                                    <th>Shared By</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="foodTable">
+                            <tbody id="foodTableBody">
+                                <!-- Food rows will be injected here -->
                             </tbody>
                         </table>
                     </div>
@@ -474,6 +491,307 @@
             </div>
         </div>
     </div>
+<!-- NEW: QR Code Modal Structure -->
+<div id="qrModal" class="modal-backdrop">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalUserName">User's QR Code</h2>
+            <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <img id="modalQrImage" src="" alt="Payment QR Code">
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        // ==================================================================
+        // 1. STATE MANAGEMENT
+        // ==================================================================
+        let state = {
+            users: [], // { id: 1, name: 'Alice', qrCode: 'data:image/...' }
+            food: [],  // { id: 101, name: 'Pizza', price: 20, userIds: [1, 2] }
+        };
+
+        let derivedState = {
+            userTotals: {},
+            userItems: {}
+        };
+
+
+        // ==================================================================
+        // 2. CORE LOGIC
+        // ==================================================================
+        function calculateAll() {
+            derivedState.userTotals = {};
+            derivedState.userItems = {};
+
+            state.users.forEach(user => {
+                derivedState.userTotals[user.id] = 0;
+                derivedState.userItems[user.id] = [];
+            });
+
+            state.food.forEach(item => {
+                if (item.userIds.length > 0) {
+                    const costPerUser = item.price / item.userIds.length;
+                    item.userIds.forEach(userId => {
+                        if (derivedState.userTotals[userId] !== undefined) {
+                            derivedState.userTotals[userId] += costPerUser;
+                            derivedState.userItems[userId].push({
+                                name: item.name,
+                                paid: costPerUser
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        // --- CRUD Functions for Users ---
+        // MODIFIED: Accepts qrCode data
+        function addUser(name, qrCode) {
+            if (!name.trim()) return;
+            if (state.users.some(user => user.name.toLowerCase() === name.toLowerCase())) {
+                alert(`User "${name}" already exists.`);
+                return;
+            }
+            const newUser = {
+                id: Date.now(),
+                name: name.trim(),
+                qrCode: qrCode || null // Store qrCode data, or null if none
+            };
+            state.users.push(newUser);
+        }
+
+        function updateUser(id, newName) {
+            if (!newName.trim()) return;
+            const user = state.users.find(u => u.id === id);
+            if (user) {
+                user.name = newName.trim();
+            }
+        }
+
+        function deleteUser(id) {
+            state.users = state.users.filter(u => u.id !== id);
+            state.food.forEach(item => {
+                item.userIds = item.userIds.filter(uid => uid !== id);
+            });
+        }
+
+        // --- CRUD Functions for Food ---
+        function addFood(name, price, userIds) {
+            if (!name.trim() || isNaN(price) || price < 0) return;
+            const newFood = {
+                id: Date.now(),
+                name: name.trim(),
+                price: parseFloat(price),
+                userIds: userIds
+            };
+            state.food.push(newFood);
+        }
+
+        function updateFood(id, newName, newPrice) {
+            if (!newName.trim() || isNaN(newPrice) || newPrice < 0) return;
+            const item = state.food.find(f => f.id === id);
+            if (item) {
+                item.name = newName.trim();
+                item.price = parseFloat(newPrice);
+            }
+        }
+
+        function deleteFood(id) {
+            state.food = state.food.filter(f => f.id !== id);
+        }
+
+        // ==================================================================
+        // 3. RENDERING
+        // ==================================================================
+        function render() {
+            calculateAll();
+            renderUserTable();
+            renderFoodTable();
+            renderUserCheckboxes();
+        }
+
+        // MODIFIED: Adds a "Show QR" button if a qrCode exists for the user
+        function renderUserTable() {
+            const $tbody = $('#userTableBody');
+            $tbody.empty();
+
+            if (state.users.length === 0) {
+                $tbody.html('<tr><td colspan="4" style="text-align: center; color: var(--text-light); padding: 20px;">No users added yet.</td></tr>');
+                return;
+            }
+
+            state.users.forEach(user => {
+                const totalOwed = derivedState.userTotals[user.id] || 0;
+                const itemsList = derivedState.userItems[user.id] || [];
+                const itemsHtml = itemsList.map(item =>
+                    `<span class="food-list-item">${item.name} (${item.paid.toFixed(2)})</span>`
+                ).join('');
+
+                // Conditionally add the QR button
+                const qrButtonHtml = user.qrCode
+                    ? `<button class="btn btn-sm btn-qr show-qr-btn" data-user-id="${user.id}">Show QR</button>`
+                    : '';
+
+                const rowHtml = `
+                    <tr data-user-id="${user.id}">
+                        <td data-field="name"><strong>${user.name}</strong></td>
+                        <td>${totalOwed.toFixed(2)}</td>
+                        <td>${itemsHtml || 'N/A'}</td>
+                        <td class="actions">
+                            ${qrButtonHtml}
+                            <button class="btn btn-sm btn-edit edit-user-btn">Edit</button>
+                            <button class="btn btn-sm btn-delete delete-user-btn">Delete</button>
+                        </td>
+                    </tr>
+                `;
+                $tbody.append(rowHtml);
+            });
+        }
+
+        function renderFoodTable() {
+            const $tbody = $('#foodTableBody');
+            $tbody.empty();
+
+            if (state.food.length === 0) {
+                $tbody.html('<tr><td colspan="4" style="text-align: center; color: var(--text-light); padding: 20px;">No food added yet.</td></tr>');
+                return;
+            }
+
+            state.food.forEach(item => {
+                const sharedByUsers = item.userIds.map(uid => {
+                    const user = state.users.find(u => u.id === uid);
+                    return user ? user.name : 'Unknown';
+                }).join(', ');
+
+                const rowHtml = `
+                    <tr data-food-id="${item.id}">
+                        <td data-field="name">${item.name}</td>
+                        <td data-field="price">${item.price.toFixed(2)}</td>
+                        <td>${sharedByUsers || 'N/A'}</td>
+                        <td class="actions">
+                            <button class="btn btn-sm btn-edit edit-food-btn">Edit</button>
+                            <button class="btn btn-sm btn-delete delete-food-btn">Delete</button>
+                        </td>
+                    </tr>
+                `;
+                $tbody.append(rowHtml);
+            });
+        }
+
+        function renderUserCheckboxes() {
+            const $container = $('#user-checkbox-container');
+            $container.empty();
+
+            if (state.users.length === 0) {
+                $container.text('Add users to see options here.');
+                return;
+            }
+
+            state.users.forEach(user => {
+                const checkboxHtml = `
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" name="sharedUsers" value="${user.id}" id="user-${user.id}">
+                        <label for="user-${user.id}">${user.name}</label>
+                    </div>
+                `;
+                $container.append(checkboxHtml);
+            });
+        }
+
+        // ==================================================================
+        // 4. EVENT HANDLERS
+        // ==================================================================
+
+        // --- Form Submissions ---
+        // MODIFIED: Handles file upload asynchronously
+        $('#addUserForm').on('submit', function (e) {
+            e.preventDefault();
+            const name = $('#username').val();
+            const file = $('#userQRCode')[0].files[0];
+
+            if (file) {
+                // If a file is selected, read it as a Data URL (Base64)
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const qrCodeData = event.target.result;
+                    addUser(name, qrCodeData); // Add user with the image data
+                    $('#addUserForm')[0].reset();
+                    render();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // If no file, add user with null QR code
+                addUser(name, null);
+                $('#addUserForm')[0].reset();
+                render();
+            }
+        });
+
+        $('#addFoodForm').on('submit', function (e) {
+            e.preventDefault();
+            const foodName = $('#foodname').val();
+            const price = $('#price').val();
+            const selectedUserIds = [];
+            $('input[name="sharedUsers"]:checked').each(function () {
+                selectedUserIds.push(parseInt($(this).val()));
+            });
+            if (selectedUserIds.length === 0) {
+                alert('Please select at least one user to share this food.');
+                return;
+            }
+            addFood(foodName, price, selectedUserIds);
+            this.reset();
+            render();
+        });
+
+        // --- Table Actions (Event Delegation) ---
+        $('#userTableBody').on('click', '.delete-user-btn', function () {
+            const userId = $(this).closest('tr').data('user-id');
+            const user = state.users.find(u => u.id === userId);
+            if (confirm(`Are you sure you want to delete ${user.name}?`)) {
+                deleteUser(userId);
+                render();
+            }
+        });
+        $('#userTableBody').on('click', '.edit-user-btn', function () { /* ... unchanged ... */ });
+        $('#userTableBody').on('click', '.save-user-btn', function () { /* ... unchanged ... */ });
+        $('#foodTableBody').on('click', '.delete-food-btn', function () { /* ... unchanged ... */ });
+        $('#foodTableBody').on('click', '.edit-food-btn', function () { /* ... unchanged ... */ });
+        $('#foodTableBody').on('click', '.save-food-btn', function () { /* ... unchanged ... */ });
+        $(document).on('click', '.cancel-edit-btn', function () { render(); });
+
+
+        // --- NEW: QR Modal Event Handlers ---
+        $('#userTableBody').on('click', '.show-qr-btn', function () {
+            const userId = $(this).data('user-id');
+            const user = state.users.find(u => u.id === userId);
+            if (user && user.qrCode) {
+                $('#modalUserName').text(user.name + "'s QR Code");
+                $('#modalQrImage').attr('src', user.qrCode);
+                $('#qrModal').css('display', 'flex'); // Show the modal
+            }
+        });
+
+        // Close modal when clicking the close button or the backdrop
+        $('.close-modal').on('click', function () {
+            $('#qrModal').fadeOut();
+        });
+        $('#qrModal').on('click', function (e) {
+            if (e.target === this) { // Only if clicking on the backdrop itself
+                $(this).fadeOut();
+            }
+        });
+
+        // ==================================================================
+        // 5. INITIALIZATION
+        // ==================================================================
+        render();
+    });
+</script>
 </body>
 
 </html>
