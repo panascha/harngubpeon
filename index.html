@@ -16,11 +16,8 @@
             --primary-start: #1abc9c;
             --primary-end: #3498db;
             --danger-color: #e74c3c;
-            --danger-hover: #c0392b;
             --success-color: #2ecc71;
-            --success-hover: #27ae60;
             --secondary-color: #bdc3c7;
-            --secondary-hover: #95a5a6;
             --qr-color-start: #8e44ad;
             --qr-color-end: #9b59b6;
 
@@ -40,26 +37,25 @@
         }
 
         /* ======================================== */
-        /*          2. GENERAL & LAYOUT             */
+        /*          2. GENERAL & LAYOUT (Mobile-First) */
         /* ======================================== */
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--background-color);
             color: var(--text-dark);
             margin: 0;
-            padding-top: 100px;
-            /* More space for the taller header */
+            padding-top: 80px;
+            /* Base padding for mobile header */
         }
 
         .header {
             background: linear-gradient(45deg, var(--primary-start), var(--primary-end));
             text-align: center;
-            padding: 20px;
-            font-size: 2.2rem;
+            padding: 15px;
+            font-size: 1.8rem;
             color: var(--text-white);
             font-weight: 300;
-            letter-spacing: 2px;
-            border-bottom: 1px solid var(--border-color);
+            letter-spacing: 1px;
             position: fixed;
             width: 100%;
             z-index: 1000;
@@ -70,14 +66,15 @@
 
         .container {
             max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 15px;
+            margin: 20px auto;
+            padding: 0 10px;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
+            grid-template-columns: 1fr;
+            /* Single column on mobile */
+            gap: 20px;
         }
 
         /* ======================================== */
@@ -92,21 +89,19 @@
             transition: all 0.3s ease;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lifted);
-        }
-
         .card-header {
             padding: 20px 25px;
             font-size: 1.4rem;
             font-weight: 500;
             border-bottom: 1px solid var(--border-color);
-            color: var(--text-dark);
         }
 
         .card-body {
             padding: 25px;
+        }
+
+        .card-body.no-padding {
+            padding: 0;
         }
 
         .form-group {
@@ -178,11 +173,7 @@
         }
 
         .btn-success {
-            background-color: var(--success-color);
-        }
-
-        .btn-success:hover {
-            background-color: var(--success-hover);
+            background: var(--success-color);
         }
 
         .btn-delete {
@@ -196,7 +187,6 @@
         .btn-qr {
             background: linear-gradient(45deg, var(--qr-color-start), var(--qr-color-end));
         }
-
 
         /* ======================================== */
         /*          5. TABLE STYLES                 */
@@ -245,8 +235,14 @@
             line-height: 1.5;
         }
 
+        .td-checkbox-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
         /* ======================================== */
-        /*          6. CUSTOM CHECKBOXES            */
+        /*          6. CUSTOM CHECKBOXES & MODAL    */
         /* ======================================== */
         #user-checkbox-container {
             display: flex;
@@ -262,20 +258,15 @@
         .checkbox-wrapper input[type="checkbox"] {
             opacity: 0;
             position: absolute;
-            width: 0;
-            height: 0;
         }
 
         .checkbox-wrapper label {
             cursor: pointer;
             padding-left: 30px;
-            /* Space for custom box */
             position: relative;
             user-select: none;
             font-weight: 400;
-            color: var(--text-dark);
             line-height: 20px;
-            /* Vertically align with box */
             display: inline-block;
         }
 
@@ -315,9 +306,6 @@
             opacity: 1;
         }
 
-        /* ======================================== */
-        /*          7. QR CODE MODAL                */
-        /* ======================================== */
         .modal-backdrop {
             position: fixed;
             top: 0;
@@ -327,10 +315,8 @@
             background: rgba(44, 62, 80, 0.7);
             z-index: 2000;
             display: none;
-            /* Hidden by default */
             justify-content: center;
             align-items: center;
-            animation: fadeIn 0.3s ease;
         }
 
         .modal-content {
@@ -341,7 +327,6 @@
             width: 90%;
             max-width: 400px;
             text-align: center;
-            animation: slideIn 0.4s ease;
         }
 
         .modal-header {
@@ -356,7 +341,6 @@
         .modal-header h2 {
             margin: 0;
             font-size: 1.5rem;
-            color: var(--text-dark);
         }
 
         .close-modal {
@@ -367,10 +351,6 @@
             line-height: 1;
         }
 
-        .close-modal:hover {
-            color: var(--danger-color);
-        }
-
         .modal-body img {
             max-width: 100%;
             height: auto;
@@ -378,29 +358,104 @@
             border: 1px solid var(--border-color);
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
+        /* ======================================== */
+        /*       7. RESPONSIVE MEDIA QUERIES        */
+        /* ======================================== */
+
+        /* For Tablets and larger screens */
+        @media (min-width: 768px) {
+            .grid {
+                /* Two columns for forms, two for tables */
+                grid-template-columns: repeat(2, 1fr);
             }
 
-            to {
-                opacity: 1;
+            .header {
+                padding: 20px;
+                font-size: 2.2rem;
+            }
+
+            body {
+                padding-top: 100px;
             }
         }
 
-        @keyframes slideIn {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
+        /* Responsive Table styles for small screens */
+        @media (max-width: 767px) {
+            .table thead {
+                display: none;
+                /* Hide traditional headers */
             }
 
-            to {
-                transform: translateY(0);
-                opacity: 1;
+            .table,
+            .table tbody,
+            .table tr,
+            .table td {
+                display: block;
+                width: 100%;
+            }
+
+            .table tr {
+                margin-bottom: 15px;
+                border: 1px solid var(--border-color);
+                border-radius: var(--border-radius-small);
+                box-shadow: var(--shadow-soft);
+            }
+
+            .table td {
+                text-align: right;
+                /* Value on the right */
+                padding-left: 50%;
+                /* Make space for label */
+                position: relative;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .table td::before {
+                content: attr(data-label);
+                /* The magic! */
+                position: absolute;
+                left: 15px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                /* Label on the left */
+                font-weight: bold;
+                color: var(--text-dark);
+            }
+
+            .table td:last-child {
+                border-bottom: 0;
+            }
+
+            /* Special handling for multi-line content and actions */
+            .table td[data-label="Items"],
+            .table td[data-label="Shared By"] {
+                text-align: left;
+                padding-left: 15px;
+            }
+
+            .table td[data-label="Items"]::before,
+            .table td[data-label="Shared By"]::before {
+                position: static;
+                display: block;
+                width: 100%;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+
+            .table td[data-label="Actions"] {
+                text-align: center;
+                padding-left: 15px;
+            }
+
+            .table td[data-label="Actions"]::before {
+                display: none;
+                /* No need for "Actions:" label */
             }
         }
     </style>
-    </head>
+</head>
 
 <body>
 
@@ -408,7 +463,6 @@
 
     <div class="container">
         <div class="grid">
-            <!-- Add User Card -->
             <div class="card">
                 <div class="card-header">Add User</div>
                 <div class="card-body">
@@ -416,17 +470,15 @@
                         <div class="form-group">
                             <label for="username">Name</label>
                             <input type="text" class="form-control" id="username" placeholder="e.g., Alice" required>
-                            </div>
-                            <!-- NEW: QR Code Upload Field -->
-                            <div class="form-group">
-                                <label for="userQRCode">Payment QR Code (Optional)</label>
-                                <input type="file" class="form-control" id="userQRCode" accept="image/*">
-                            </div>
-                            <button type="submit" class="btn">Add User</button>
-                            </form>
+                        </div>
+                        <div class="form-group">
+                            <label for="userQRCode">Payment QR Code (Optional)</label>
+                            <input type="file" class="form-control" id="userQRCode" accept="image/*">
+                        </div>
+                        <button type="submit" class="btn">Add User</button>
+                        </form>
                 </div>
-                </div>
-<!-- Add Food Card -->
+            </div>
 <div class="card">
                 <div class="card-header">Add Food</div>
                 <div class="card-body">
@@ -434,7 +486,7 @@
                         <div class="form-group">
                             <label for="foodname">Food Name</label>
                             <input type="text" class="form-control" id="foodname" placeholder="e.g., Pizza" required>
-                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="price">Price</label>
                             <input type="number" class="form-control" id="price" min="0" step="any" placeholder="e.g., 25.50" required>
@@ -444,13 +496,12 @@
                             <div id="user-checkbox-container">Add users to see options here.</div>
                         </div>
                         <button type="submit" class="btn">Add Food</button>
-                        </form>
-                        </div>
-                        </div>
-<!-- Users Table Card -->
+                    </form>
+                    </div>
+                    </div>
 <div class="card">
                 <div class="card-header">Users</div>
-                <div class="card-body" style="padding: 0;">
+                <div class="card-body no-padding">
                     <div class="table-container">
                         <table class="table">
                             <thead>
@@ -461,17 +512,14 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="userTableBody">
-                                <!-- User rows will be injected here -->
-                            </tbody>
+                            <tbody id="userTableBody"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
-<!-- Food Table Card -->
 <div class="card">
                 <div class="card-header">Food</div>
-                <div class="card-body" style="padding: 0;">
+                <div class="card-body no-padding">
                     <div class="table-container">
                         <table class="table">
                             <thead>
@@ -482,16 +530,13 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="foodTableBody">
-                                <!-- Food rows will be injected here -->
-                            </tbody>
+                            <tbody id="foodTableBody"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-<!-- NEW: QR Code Modal Structure -->
 <div id="qrModal" class="modal-backdrop">
     <div class="modal-content">
         <div class="modal-header">
@@ -504,294 +549,227 @@
     </div>
 </div>
 
-<script>
-    $(function () {
+    <script>
+        $(function () {
         // ==================================================================
-        // 1. STATE MANAGEMENT
-        // ==================================================================
-        let state = {
-            users: [], // { id: 1, name: 'Alice', qrCode: 'data:image/...' }
-            food: [],  // { id: 101, name: 'Pizza', price: 20, userIds: [1, 2] }
-        };
+            // 1. STATE MANAGEMENT & CORE LOGIC
+            // ==================================================================
+            let state = { users: [], food: [] };
+            let derivedState = { userTotals: {}, userItems: {} };
 
-        let derivedState = {
-            userTotals: {},
-            userItems: {}
-        };
-
-
-        // ==================================================================
-        // 2. CORE LOGIC
-        // ==================================================================
-        function calculateAll() {
-            derivedState.userTotals = {};
-            derivedState.userItems = {};
-
-            state.users.forEach(user => {
-                derivedState.userTotals[user.id] = 0;
-                derivedState.userItems[user.id] = [];
-            });
-
-            state.food.forEach(item => {
-                if (item.userIds.length > 0) {
-                    const costPerUser = item.price / item.userIds.length;
-                    item.userIds.forEach(userId => {
-                        if (derivedState.userTotals[userId] !== undefined) {
-                            derivedState.userTotals[userId] += costPerUser;
-                            derivedState.userItems[userId].push({
-                                name: item.name,
-                                paid: costPerUser
-                            });
-                        }
-                    });
+            function calculateAll() {
+                derivedState.userTotals = {};
+                derivedState.userItems = {};
+                state.users.forEach(user => {
+                    derivedState.userTotals[user.id] = 0;
+                    derivedState.userItems[user.id] = [];
+                });
+                state.food.forEach(item => {
+                    if (item.userIds.length > 0) {
+                        const costPerUser = item.price / item.userIds.length;
+                        item.userIds.forEach(userId => {
+                            if (derivedState.userTotals[userId] !== undefined) {
+                                derivedState.userTotals[userId] += costPerUser;
+                                derivedState.userItems[userId].push({ name: item.name, paid: costPerUser });
+                            }
+                        });
+                    }
+                });
+            }
+            function addUser(name, qrCode) {
+                if (!name.trim() || state.users.some(u => u.name.toLowerCase() === name.toLowerCase())) {
+                    if (name.trim()) alert(`User "${name}" already exists.`);
+                    return;
                 }
-            });
-        }
-
-        // --- CRUD Functions for Users ---
-        // MODIFIED: Accepts qrCode data
-        function addUser(name, qrCode) {
-            if (!name.trim()) return;
-            if (state.users.some(user => user.name.toLowerCase() === name.toLowerCase())) {
-                alert(`User "${name}" already exists.`);
-                return;
+                state.users.push({ id: Date.now(), name: name.trim(), qrCode: qrCode || null });
             }
-            const newUser = {
-                id: Date.now(),
-                name: name.trim(),
-                qrCode: qrCode || null // Store qrCode data, or null if none
-            };
-            state.users.push(newUser);
-        }
-
-        function updateUser(id, newName) {
-            if (!newName.trim()) return;
-            const user = state.users.find(u => u.id === id);
-            if (user) {
-                user.name = newName.trim();
+            function updateUser(id, newName) {
+                const user = state.users.find(u => u.id === id);
+                if (user && newName.trim()) user.name = newName.trim();
             }
-        }
-
-        function deleteUser(id) {
-            state.users = state.users.filter(u => u.id !== id);
-            state.food.forEach(item => {
-                item.userIds = item.userIds.filter(uid => uid !== id);
-            });
-        }
-
-        // --- CRUD Functions for Food ---
-        function addFood(name, price, userIds) {
-            if (!name.trim() || isNaN(price) || price < 0) return;
-            const newFood = {
-                id: Date.now(),
-                name: name.trim(),
-                price: parseFloat(price),
-                userIds: userIds
-            };
-            state.food.push(newFood);
-        }
-
-        function updateFood(id, newName, newPrice) {
-            if (!newName.trim() || isNaN(newPrice) || newPrice < 0) return;
-            const item = state.food.find(f => f.id === id);
-            if (item) {
-                item.name = newName.trim();
-                item.price = parseFloat(newPrice);
+            function deleteUser(id) {
+                state.users = state.users.filter(u => u.id !== id);
+                state.food.forEach(item => { item.userIds = item.userIds.filter(uid => uid !== id); });
             }
-        }
-
-        function deleteFood(id) {
-            state.food = state.food.filter(f => f.id !== id);
-        }
-
-        // ==================================================================
-        // 3. RENDERING
-        // ==================================================================
-        function render() {
-            calculateAll();
-            renderUserTable();
-            renderFoodTable();
-            renderUserCheckboxes();
-        }
-
-        // MODIFIED: Adds a "Show QR" button if a qrCode exists for the user
-        function renderUserTable() {
-            const $tbody = $('#userTableBody');
-            $tbody.empty();
-
-            if (state.users.length === 0) {
-                $tbody.html('<tr><td colspan="4" style="text-align: center; color: var(--text-light); padding: 20px;">No users added yet.</td></tr>');
-                return;
+            function addFood(name, price, userIds) {
+                if (!name.trim() || isNaN(price) || price < 0) return;
+                state.food.push({ id: Date.now(), name: name.trim(), price: parseFloat(price), userIds: userIds });
+            }
+            function updateFood(id, newName, newPrice, newUserIds) {
+                const item = state.food.find(f => f.id === id);
+                if (item && newName.trim() && !isNaN(newPrice) && newPrice >= 0) {
+                    item.name = newName.trim();
+                    item.price = parseFloat(newPrice);
+                    item.userIds = newUserIds;
+                }
+            }
+            function deleteFood(id) {
+                state.food = state.food.filter(f => f.id !== id);
             }
 
-            state.users.forEach(user => {
-                const totalOwed = derivedState.userTotals[user.id] || 0;
-                const itemsList = derivedState.userItems[user.id] || [];
-                const itemsHtml = itemsList.map(item =>
-                    `<span class="food-list-item">${item.name} (${item.paid.toFixed(2)})</span>`
-                ).join('');
+            // ==================================================================
+            // 3. RENDERING
+            // ==================================================================
+            function render() {
+                calculateAll();
+                renderUserTable();
+                renderFoodTable();
+                renderUserCheckboxes();
+            }
 
-                // Conditionally add the QR button
-                const qrButtonHtml = user.qrCode
-                    ? `<button class="btn btn-sm btn-qr show-qr-btn" data-user-id="${user.id}">Show QR</button>`
-                    : '';
-
-                const rowHtml = `
+            function renderUserTable() {
+                const $tbody = $('#userTableBody');
+                $tbody.empty();
+                if (state.users.length === 0) {
+                    $tbody.html('<tr><td colspan="4" style="text-align: center; color: var(--text-light); padding: 20px;" data-label="Info">No users added yet.</td></tr>');
+                    return;
+                }
+                state.users.forEach(user => {
+                    const totalOwed = derivedState.userTotals[user.id] || 0;
+                    const itemsList = derivedState.userItems[user.id] || [];
+                    const itemsHtml = itemsList.length > 0 ? itemsList.map(item => `<span class="food-list-item">${item.name} ($${item.paid.toFixed(2)})</span>`).join('') : 'N/A';
+                    const qrButtonHtml = user.qrCode ? `<button class="btn btn-sm btn-qr show-qr-btn" data-user-id="${user.id}">Show QR</button>` : '';
+                    // ADDED data-label attributes for responsive CSS
+                    const rowHtml = `
                     <tr data-user-id="${user.id}">
-                        <td data-field="name"><strong>${user.name}</strong></td>
-                        <td>${totalOwed.toFixed(2)}</td>
-                        <td>${itemsHtml || 'N/A'}</td>
-                        <td class="actions">
+                        <td data-label="Name"><strong>${user.name}</strong></td>
+                        <td data-label="Total Owed">$${totalOwed.toFixed(2)}</td>
+                        <td data-label="Items">${itemsHtml}</td>
+                        <td data-label="Actions" class="actions">
                             ${qrButtonHtml}
                             <button class="btn btn-sm btn-edit edit-user-btn">Edit</button>
                             <button class="btn btn-sm btn-delete delete-user-btn">Delete</button>
                         </td>
-                    </tr>
-                `;
-                $tbody.append(rowHtml);
-            });
-        }
-
-        function renderFoodTable() {
-            const $tbody = $('#foodTableBody');
-            $tbody.empty();
-
-            if (state.food.length === 0) {
-                $tbody.html('<tr><td colspan="4" style="text-align: center; color: var(--text-light); padding: 20px;">No food added yet.</td></tr>');
-                return;
+                    </tr>`;
+                    $tbody.append(rowHtml);
+                });
             }
 
-            state.food.forEach(item => {
-                const sharedByUsers = item.userIds.map(uid => {
-                    const user = state.users.find(u => u.id === uid);
-                    return user ? user.name : 'Unknown';
-                }).join(', ');
-
-                const rowHtml = `
+            function renderFoodTable() {
+                const $tbody = $('#foodTableBody');
+                $tbody.empty();
+                if (state.food.length === 0) {
+                    $tbody.html('<tr><td colspan="4" style="text-align: center; color: var(--text-light); padding: 20px;" data-label="Info">No food added yet.</td></tr>');
+                    return;
+                }
+                state.food.forEach(item => {
+                    const sharedByUsers = item.userIds.map(uid => state.users.find(u => u.id === uid)?.name || 'Unknown').join(', ') || 'N/A';
+                    // ADDED data-label attributes for responsive CSS
+                    const rowHtml = `
                     <tr data-food-id="${item.id}">
-                        <td data-field="name">${item.name}</td>
-                        <td data-field="price">${item.price.toFixed(2)}</td>
-                        <td>${sharedByUsers || 'N/A'}</td>
-                        <td class="actions">
+                        <td data-label="Name">${item.name}</td>
+                        <td data-label="Price">$${item.price.toFixed(2)}</td>
+                        <td data-label="Shared By">${sharedByUsers}</td>
+                        <td data-label="Actions" class="actions">
                             <button class="btn btn-sm btn-edit edit-food-btn">Edit</button>
                             <button class="btn btn-sm btn-delete delete-food-btn">Delete</button>
                         </td>
-                    </tr>
-                `;
-                $tbody.append(rowHtml);
-            });
-        }
-
-        function renderUserCheckboxes() {
-            const $container = $('#user-checkbox-container');
-            $container.empty();
-
-            if (state.users.length === 0) {
-                $container.text('Add users to see options here.');
-                return;
+                    </tr>`;
+                    $tbody.append(rowHtml);
+                });
             }
 
-            state.users.forEach(user => {
-                const checkboxHtml = `
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" name="sharedUsers" value="${user.id}" id="user-${user.id}">
-                        <label for="user-${user.id}">${user.name}</label>
-                    </div>
-                `;
-                $container.append(checkboxHtml);
+            function renderUserCheckboxes() {
+                const $container = $('#user-checkbox-container');
+                $container.empty();
+                if (state.users.length === 0) {
+                    $container.text('Add users to see options here.');
+                    return;
+                }
+                state.users.forEach(user => {
+                    $container.append(`<div class="checkbox-wrapper"><input type="checkbox" name="sharedUsers" value="${user.id}" id="user-${user.id}"><label for="user-${user.id}">${user.name}</label></div>`);
+                });
+            }
+
+            // ==================================================================
+            // 4. EVENT HANDLERS
+            // ==================================================================
+            $('#addUserForm').on('submit', function (e) {
+                e.preventDefault();
+                const name = $('#username').val();
+                const file = $('#userQRCode')[0].files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = e => { addUser(name, e.target.result); this.reset(); render(); };
+                    reader.readAsDataURL(file);
+                } else {
+                    addUser(name, null); this.reset(); render();
+                }
             });
-        }
+            $('#addFoodForm').on('submit', function (e) {
+                e.preventDefault();
+                const selectedUserIds = $('input[name="sharedUsers"]:checked').map((_, el) => parseInt($(el).val())).get();
+                if (selectedUserIds.length === 0) {
+                    alert('Please select at least one user to share this food.'); return;
+                }
+                addFood($('#foodname').val(), $('#price').val(), selectedUserIds);
+                this.reset(); render();
+            });
 
-        // ==================================================================
-        // 4. EVENT HANDLERS
-        // ==================================================================
-
-        // --- Form Submissions ---
-        // MODIFIED: Handles file upload asynchronously
-        $('#addUserForm').on('submit', function (e) {
-            e.preventDefault();
-            const name = $('#username').val();
-            const file = $('#userQRCode')[0].files[0];
-
-            if (file) {
-                // If a file is selected, read it as a Data URL (Base64)
-                const reader = new FileReader();
-                reader.onload = function (event) {
-                    const qrCodeData = event.target.result;
-                    addUser(name, qrCodeData); // Add user with the image data
-                    $('#addUserForm')[0].reset();
-                    render();
-                };
-                reader.readAsDataURL(file);
-            } else {
-                // If no file, add user with null QR code
-                addUser(name, null);
-                $('#addUserForm')[0].reset();
+            // --- Table Actions (Event Delegation) ---
+            $('#userTableBody').on('click', '.delete-user-btn', function () {
+                const userId = $(this).closest('tr').data('user-id');
+                if (confirm(`Delete ${state.users.find(u => u.id === userId).name}?`)) { deleteUser(userId); render(); }
+            });
+            $('#userTableBody').on('click', '.edit-user-btn', function () {
+                const $tr = $(this).closest('tr');
+                const user = state.users.find(u => u.id === $tr.data('user-id'));
+                const qrBtn = user.qrCode ? `<button class="btn btn-sm btn-qr show-qr-btn" data-user-id="${user.id}">Show QR</button>` : '';
+                $tr.find('[data-label="Name"]').html(`<input type="text" class="form-control" value="${user.name}">`);
+                $tr.find('.actions').html(`${qrBtn} <button class="btn btn-sm btn-success save-user-btn">Save</button> <button class="btn btn-sm btn-secondary cancel-edit-btn">Cancel</button>`);
+            });
+            $('#userTableBody').on('click', '.save-user-btn', function () {
+                const $tr = $(this).closest('tr');
+                updateUser($tr.data('user-id'), $tr.find('input').val()); render();
+            });
+            $('#foodTableBody').on('click', '.delete-food-btn', function () {
+                const foodId = $(this).closest('tr').data('food-id');
+                if (confirm(`Delete ${state.food.find(f => f.id === foodId).name}?`)) { deleteFood(foodId); render(); }
+            });
+            $('#foodTableBody').on('click', '.edit-food-btn', function () {
+                const $tr = $(this).closest('tr');
+                const foodItem = state.food.find(f => f.id === $tr.data('food-id'));
+                $tr.find('[data-label="Name"]').html(`<input type="text" class="form-control" value="${foodItem.name}">`);
+                $tr.find('[data-label="Price"]').html(`<input type="number" step="any" min="0" class="form-control" value="${foodItem.price.toFixed(2)}">`);
+                let checkboxesHtml = '<div class="td-checkbox-container">';
+                state.users.forEach(user => {
+                    const isChecked = foodItem.userIds.includes(user.id);
+                    checkboxesHtml += `<div class="checkbox-wrapper"><input type="checkbox" value="${user.id}" id="edit-user-${foodItem.id}-${user.id}" ${isChecked ? 'checked' : ''}><label for="edit-user-${foodItem.id}-${user.id}">${user.name}</label></div>`;
+                });
+                $tr.find('[data-label="Shared By"]').html(checkboxesHtml + '</div>');
+                $tr.find('.actions').html(`<button class="btn btn-sm btn-success save-food-btn">Save</button> <button class="btn btn-sm btn-secondary cancel-edit-btn">Cancel</button>`);
+            });
+            $('#foodTableBody').on('click', '.save-food-btn', function () {
+                const $tr = $(this).closest('tr');
+                const foodId = $tr.data('food-id');
+                const newUserIds = $tr.find('[data-label="Shared By"] input:checked').map((_, el) => parseInt($(el).val())).get();
+                if (newUserIds.length === 0) { alert('A food item must be shared by at least one user.'); return; }
+                updateFood(foodId, $tr.find('[data-label="Name"] input').val(), $tr.find('[data-label="Price"] input').val(), newUserIds);
                 render();
-            }
-        });
-
-        $('#addFoodForm').on('submit', function (e) {
-            e.preventDefault();
-            const foodName = $('#foodname').val();
-            const price = $('#price').val();
-            const selectedUserIds = [];
-            $('input[name="sharedUsers"]:checked').each(function () {
-                selectedUserIds.push(parseInt($(this).val()));
             });
-            if (selectedUserIds.length === 0) {
-                alert('Please select at least one user to share this food.');
-                return;
-            }
-            addFood(foodName, price, selectedUserIds);
-            this.reset();
+
+            // --- Universal & Modal Handlers ---
+            $(document).on('click', '.cancel-edit-btn', () => render());
+            $('#userTableBody').on('click', '.show-qr-btn', function () {
+                const user = state.users.find(u => u.id === $(this).data('user-id'));
+                if (user?.qrCode) {
+                    $('#modalUserName').text(`${user.name}'s QR Code`);
+                    $('#modalQrImage').attr('src', user.qrCode);
+                    $('.modal-backdrop').css('display', 'flex').hide().fadeIn(200);
+                }
+            });
+            $('.modal-backdrop').on('click', function (e) {
+                if (e.target === this || $(e.target).hasClass('close-modal')) {
+                    $(this).fadeOut(200);
+                }
+            });
+
+            // ==================================================================
+            // 5. INITIALIZATION
+            // ==================================================================
             render();
         });
-
-        // --- Table Actions (Event Delegation) ---
-        $('#userTableBody').on('click', '.delete-user-btn', function () {
-            const userId = $(this).closest('tr').data('user-id');
-            const user = state.users.find(u => u.id === userId);
-            if (confirm(`Are you sure you want to delete ${user.name}?`)) {
-                deleteUser(userId);
-                render();
-            }
-        });
-        $('#userTableBody').on('click', '.edit-user-btn', function () { /* ... unchanged ... */ });
-        $('#userTableBody').on('click', '.save-user-btn', function () { /* ... unchanged ... */ });
-        $('#foodTableBody').on('click', '.delete-food-btn', function () { /* ... unchanged ... */ });
-        $('#foodTableBody').on('click', '.edit-food-btn', function () { /* ... unchanged ... */ });
-        $('#foodTableBody').on('click', '.save-food-btn', function () { /* ... unchanged ... */ });
-        $(document).on('click', '.cancel-edit-btn', function () { render(); });
-
-
-        // --- NEW: QR Modal Event Handlers ---
-        $('#userTableBody').on('click', '.show-qr-btn', function () {
-            const userId = $(this).data('user-id');
-            const user = state.users.find(u => u.id === userId);
-            if (user && user.qrCode) {
-                $('#modalUserName').text(user.name + "'s QR Code");
-                $('#modalQrImage').attr('src', user.qrCode);
-                $('#qrModal').css('display', 'flex'); // Show the modal
-            }
-        });
-
-        // Close modal when clicking the close button or the backdrop
-        $('.close-modal').on('click', function () {
-            $('#qrModal').fadeOut();
-        });
-        $('#qrModal').on('click', function (e) {
-            if (e.target === this) { // Only if clicking on the backdrop itself
-                $(this).fadeOut();
-            }
-        });
-
-        // ==================================================================
-        // 5. INITIALIZATION
-        // ==================================================================
-        render();
-    });
-</script>
+            </script>
 </body>
 
 </html>
