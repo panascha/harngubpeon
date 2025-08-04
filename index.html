@@ -469,7 +469,7 @@
                     <form id="addUserForm">
                         <div class="form-group">
                             <label for="username">Name</label>
-                            <input type="text" class="form-control" id="username" placeholder="e.g., Alice" required>
+                            <input type="text" class="form-control" id="username" placeholder="e.g., Panas" required>
                         </div>
                         <div class="form-group">
                             <label for="userQRCode">Payment QR Code (Optional)</label>
@@ -485,7 +485,7 @@
                     <form id="addFoodForm">
                         <div class="form-group">
                             <label for="foodname">Food Name</label>
-                            <input type="text" class="form-control" id="foodname" placeholder="e.g., Pizza" required>
+                            <input type="text" class="form-control" id="foodname" placeholder="e.g., เตี๋ยวไก่" required>
                         </div>
                         <div class="form-group">
                             <label for="price">Price</label>
@@ -627,13 +627,13 @@
                 state.users.forEach(user => {
                     const totalOwed = derivedState.userTotals[user.id] || 0;
                     const itemsList = derivedState.userItems[user.id] || [];
-                    const itemsHtml = itemsList.length > 0 ? itemsList.map(item => `<span class="food-list-item">${item.name} ($${item.paid.toFixed(2)})</span>`).join('') : 'N/A';
+                    const itemsHtml = itemsList.length > 0 ? itemsList.map(item => `<span class="food-list-item">${item.name} (${item.paid.toFixed(2)})</span>`).join('') : 'N/A';
                     const qrButtonHtml = user.qrCode ? `<button class="btn btn-sm btn-qr show-qr-btn" data-user-id="${user.id}">Show QR</button>` : '';
                     // ADDED data-label attributes for responsive CSS
                     const rowHtml = `
                     <tr data-user-id="${user.id}">
                         <td data-label="Name"><strong>${user.name}</strong></td>
-                        <td data-label="Total Owed">$${totalOwed.toFixed(2)}</td>
+                        <td data-label="Total Owed">${totalOwed.toFixed(2)}</td>
                         <td data-label="Items">${itemsHtml}</td>
                         <td data-label="Actions" class="actions">
                             ${qrButtonHtml}
@@ -658,7 +658,7 @@
                     const rowHtml = `
                     <tr data-food-id="${item.id}">
                         <td data-label="Name">${item.name}</td>
-                        <td data-label="Price">$${item.price.toFixed(2)}</td>
+                        <td data-label="Price">${item.price.toFixed(2)}</td>
                         <td data-label="Shared By">${sharedByUsers}</td>
                         <td data-label="Actions" class="actions">
                             <button class="btn btn-sm btn-edit edit-food-btn">Edit</button>
